@@ -1,27 +1,45 @@
+import { kv } from "@vercel/kv";
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-// Tentukan lokasi file JSON yang akan dibaca/ditulis
+// File lokal hanya untuk development
 const filePath = path.join(process.cwd(), "app/product.json");
 
+// --- GET PRODUCT ---
 export async function GET() {
-  // Membaca file product.json secara sinkron
-  // fs.readFileSync akan membaca isi file sebagai string UTF-8
-  const data = fs.readFileSync(filePath, "utf8");
+  try {
+    // 1. Coba baca dari KV
+    const kvData = await kv.get("product");
+    if (kvData) {
+      return NextResponse.json(kvData);
+    }
 
-  // Mengirim response berupa JSON ke client
-  return NextResponse.json(JSON.parse(data));
+    // 2. Jika KV kosong → baca file lokal (untuk mode dev)
+    const data = fs.readFileSync(filePath, "utf8");
+    return NextResponse.json(JSON.parse(data));
+
+  } catch (err) {
+    return NextResponse.json({ error: "Failed to read product" }, { status: 500 });
+  }
 }
 
+// --- UPDATE PRODUCT ---
 export async function POST(request) {
-  // Mengambil body request dan parsing menjadi object
-  const body = await request.json();
+  try {
+    const body = await request.json();
 
-  // Menulis ulang file product.json dengan data baru
-  // JSON.stringify(body, null, 2) --> merapikan format JSON
-  fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    // 1. Simpan ke KV (utama)
+    await kv.set("product", body);
 
-  // Mengirim response sukses
-  return NextResponse.json({ message: "success" });
+    // 2. Simpan ke file lokal hanya saat development
+    if (process.env.NODE_ENV === "development") {
+      fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    }
+
+    return NextResponse.json({ message: "success" });
+
+  } catch (err) {
+    return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
+  }
 }
