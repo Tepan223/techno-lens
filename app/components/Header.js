@@ -15,7 +15,7 @@ export default function Header() {
     <div className={Styles.header}>
         <div>
             <a href="/" className={Styles.logo}>
-                <img src='Techno-Lens.png' className={Styles.techno}></img>
+                <img src='/images/Techno-Lens.png' className={Styles.techno}></img>
             </a>
         </div>
 
