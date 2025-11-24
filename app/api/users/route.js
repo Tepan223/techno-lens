@@ -1,57 +1,35 @@
-import { put, list } from "@vercel/blob";
-import { NextResponse } from "next/server";
+import { promises as fs } from "fs";
+import path from "path";
 
-const FILE_NAME = "users.json";
+const DEV_FILE = path.join(process.cwd(), "app/users.json");
 
 // --- GET USER ---
 export async function GET() {
   try {
-    // Cari file users.json di blob storage
-    const files = await list();
-    const file = files.blobs.find(b => b.pathname === FILE_NAME);
-
-    if (!file) {
-      return NextResponse.json({ user: null }, { status: 200 });
-    }
-
-    const json = await fetch(file.url).then(res => res.json());
-
-    return NextResponse.json(json, { status: 200 });
-
-  } catch (err) {
-    console.error("GET users error:", err);
-    return NextResponse.json({ user: null }, { status: 200 });
+    const data = await fs.readFile(DEV_FILE, "utf-8");
+    if (!data.trim()) return Response.json({ user: null });
+    const json = JSON.parse(data);
+    return Response.json({ user: json.user || null });
+  } catch {
+    return Response.json({ user: null });
   }
 }
 
-// --- UPDATE USER ---
+// --- POST / UPDATE USER ---
 export async function POST(req) {
   try {
     const body = await req.json();
 
-    if (!body.user) {
-      return NextResponse.json(
-        { error: "Invalid user format" },
-        { status: 400 }
-      );
+    if (!body.user?.username || !body.user?.password) {
+      return Response.json({ error: "Username & password required" }, { status: 400 });
     }
 
-    // Simpan JSON ke blob
-    await put(FILE_NAME, JSON.stringify(body, null, 2), {
-      access: "public",
-      contentType: "application/json"
-    });
+    // simpan ke file lokal
+    await fs.writeFile(DEV_FILE, JSON.stringify(body, null, 2));
 
-    return NextResponse.json(
-      { message: "User updated!" },
-      { status: 200 }
-    );
-
-  } catch (err) {
-    console.error("POST users error:", err);
-    return NextResponse.json(
-      { error: "Failed to update user" },
-      { status: 500 }
-    );
+    return Response.json({ message: "User berhasil diperbarui!" });
+  } catch (e) {
+    console.error(e);
+    return Response.json({ error: "SERVER ERROR" }, { status: 500 });
   }
 }
