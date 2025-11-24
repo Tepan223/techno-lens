@@ -1,0 +1,132 @@
+.aboutPage {
+    padding: 2rem;
+    padding-bottom: 0;
+    font-family: sans-serif;
+    background-color: #E1E1E1;
+    
+}
+
+.about {
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 3vh;
+}
+
+.about h3 {
+    color: #333333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.about p {
+    color: #555555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    text-align: justify;
+    font-size: 1.1rem;
+}
+
+/* --- VISI MISI SECTION --- */
+.aboutVisiMisiion {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.visi, .misi {
+    width: 48%;
+    background-color: #FFFFFF;
+    padding: 2rem;
+    border-radius: 2vh;
+    min-height: 30vh; /* lebih flexible daripada fixed height */
+}
+
+.visi h2, .misi h2 {
+    color: #333333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.visi p {
+    color: #555555;
+    line-height: 1.6;
+    text-align: justify;
+    font-size: 1.1rem;
+}
+
+.misi ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+}
+
+.misi li {
+    color: #555555;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* =====================================================
+   RESPONSIVE BREAKPOINTS
+===================================================== */
+
+/* --- TABLET (≤1024px) --- */
+@media (max-width: 1024px) {
+    .about {
+        padding: 2rem;
+    }
+
+    .aboutVisiMisiion {
+        gap: 1.5rem;
+    }
+
+    .visi, .misi {
+        padding: 1.5rem;
+        min-height: auto;
+    }
+}
+
+/* --- MOBILE (≤768px) --- */
+@media (max-width: 768px) {
+    .about {
+        padding: 1.5rem;
+    }
+
+    .aboutVisiMisiion {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .visi, .misi {
+        width: 100%;
+        padding: 1.5rem;
+    }
+
+    .about p, .visi p, .misi li {
+        font-size: 1rem;
+    }
+}
+
+/* --- HP KECIL (≤480px) --- */
+@media (max-width: 480px) {
+    .about {
+        padding: 1rem;
+    }
+
+    .visi, .misi {
+        padding: 1.2rem;
+        border-radius: 1.5vh;
+    }
+
+    .visi h2, .misi h2 {
+        font-size: 1.2rem;
+    }
+
+    .about p, .visi p, .misi li {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+}

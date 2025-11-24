@@ -1,0 +1,117 @@
+.header {
+    max-width: 100%;
+    background-color: #ffffff;
+    padding: 10px 30px;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.techno {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+
+.navlinks {
+    display: flex;
+    gap: 20px;
+    font-size: 18px;
+    align-items: center;
+}
+
+.link {
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+    transition: color 0.2s ease 0.1s;
+}
+
+.link:not(:last-child)::after {
+    content: "|";
+    margin-left: 20px;
+    color: #1a153f;
+    opacity: 0.8;
+}
+
+.link:hover {
+    color: #dc6d6d;
+}
+
+/* =====================================================
+   RESPONSIVE BREAKPOINTS
+===================================================== */
+
+/* --- TABLET (≤1024px) --- */
+@media (max-width: 1024px) {
+    .header {
+        font-size: 20px;
+        padding: 10px 20px;
+    }
+
+    .navlinks {
+        gap: 15px;
+        font-size: 16px;
+    }
+
+    .link:not(:last-child)::after {
+        margin-left: 12px;
+    }
+}
+
+/* --- MOBILE (≤768px) --- */
+@media (max-width: 768px) {
+    .header {
+        flex-wrap: wrap;
+        height: auto;         /* agar header bisa memanjang */
+        font-size: 18px;
+        gap: 10px;
+        padding: 10px 15px;
+    }
+
+    .logo, .techno {
+        height: 40px;
+    }
+
+    .navlinks {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+        font-size: 15px;
+        flex-wrap: wrap;
+    }
+
+    .link:not(:last-child)::after {
+        margin-left: 8px;
+    }
+}
+
+/* --- SMALL MOBILE (≤480px) --- */
+@media (max-width: 480px) {
+    .header {
+        padding: 8px 10px;
+        font-size: 16px;
+    }
+
+    .logo, .techno {
+        height: 35px;
+    }
+
+    .navlinks {
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    .link:not(:last-child)::after {
+        margin-left: 6px;
+    }
+}

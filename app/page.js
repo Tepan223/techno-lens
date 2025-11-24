@@ -1,66 +1,64 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import Footer from "./components/Footer";
+
+import "swiper/css";
+import "swiper/css/pagination";
+
+import Style from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className={Style.main}>
+      <Swiper
+        modules={[Pagination, Autoplay]}
+        autoplay={{
+          delay: 2000,
+          disableOnInteraction: false,
+        }}
+        loop={true}
+        className="mySwiper"
+      >
+        <SwiperSlide>
+          <img src="Main 1 (1).jpg" alt="Slide 1" className={Style.swiperSlide}/>
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="Main 2 (1).jpg" alt="Slide 2" className={Style.swiperSlide}/>
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="Main 3 (1).jpg" alt="Slide 3" className={Style.swiperSlide}/>
+        </SwiperSlide>
+      </Swiper>
+      <div className={Style.productSection}>
+        <div className={Style.product}>
+          <img src="Background (Main).webp" className={Style.productIMG}></img>
+          <p className={Style.productName}>Background Studio Hitam</p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className={Style.product}>
+          <img src="Baterai (Main).webp" className={Style.productIMG}></img>
+          <p className={Style.productName}>Baterai Canon LP-E17</p>
         </div>
-      </main>
+        <div className={Style.product}>
+          <img src="Charger (Main).webp" className={Style.productIMG}></img>
+          <p  className={Style.productName}>Charger Kamera Sony BC-TRW</p>
+        </div>
+      </div>
+      <div className={Style.newSection}>
+        <div style={{display:'flex'}}>
+          <div className={Style.newArrival}>
+            <img src="Drone (Main).webp"></img>
+          </div>
+        <div className={Style.newText}>New</div>
+        </div>
+        
+        <div className={Style.newDescription}>
+          <h1>DRONE DJI MAVIC AIR 2</h1>
+          <p>Abadikan setiap momen dari ketinggian dengan teknologi Drone DJI Mavic Air 2. Dengan kamera ultra tajam dan sistem penghindar rintangan otomatis, drone ini siap membantu Anda menghasilkan visual profesional dan data akurat untuk berbagai kebutuhan industri. Drone DJI Mavic Air 2 adalah solusi udara masa depan yang Anda butuhkan hari ini.</p>
+          <button className={Style.buttonProduct}>Lihat Produk</button>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }

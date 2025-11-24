@@ -1,0 +1,74 @@
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contactPage {
+  padding: 6vh 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e1e1e1;
+  font-family: sans-serif;
+}
+
+.contact {
+  background: #ffffff;
+  width: 90%;
+  padding: 3.5rem 3rem;
+  border-radius: 22px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.contact h1 {
+  text-align: center;
+  color: #1e1e1e;
+  font-size: 2.8rem;
+  margin-bottom: 2.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.textnform {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.text {
+  flex: 1;
+  min-width: 280px;
+}
+
+.text h3 {
+  font-size: 1.9rem;
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.text p {
+  color: #555;
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+
+.form {
+  flex: 1;
+  min-width: 320px;
+}
+
+.submitBtn {
+  height: 52px !important;
+  border-radius: 12px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+}
+
+.text p{
+    font-size: large;
+}

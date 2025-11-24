@@ -1,0 +1,128 @@
+.footer {
+  background-color: #e5e5e5;
+  padding-top: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.dividerTop {
+  background-color: #999 !important;
+  height: 1px !important;
+  margin: 0 !important;
+}
+
+.footerContent {
+  padding: 30px 60px 20px;
+}
+
+/* ----- HEADER SECTION ----- */
+.headerFooter {
+  font-weight: 600;
+  color: #555;
+  display: flex;
+  gap: 120px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+/* ----- LINKS SECTION ----- */
+.LinksSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 80px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.LinksSection a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.LinksSection a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* ----- BOTTOM LINE ----- */
+.dividerBottom {
+  background-color: #999 !important;
+  height: 1px !important;
+  margin-top: 40px !important;
+  margin-bottom: 15px !important;
+}
+
+.copy {
+  color: #666;
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
+}
+
+/* =====================================================
+   RESPONSIVE BREAKPOINTS
+===================================================== */
+
+/* ----- TABLET (≤1024px) ----- */
+@media (max-width: 1024px) {
+  .footerContent {
+    padding: 25px 40px;
+  }
+
+  .headerFooter {
+    gap: 40px;
+    font-size: 15px;
+  }
+
+  .LinksSection {
+    gap: 40px;
+  }
+}
+
+/* ----- MOBILE (≤768px) ----- */
+@media (max-width: 768px) {
+  .footerContent {
+    padding: 20px 25px;
+  }
+
+  .headerFooter {
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+  }
+
+  .LinksSection {
+    gap: 25px;
+  }
+
+  .column {
+    min-width: 140px;
+  }
+}
+
+/* ----- SMALL MOBILE (≤480px) ----- */
+@media (max-width: 480px) {
+  .footerContent {
+    padding: 15px 15px;
+  }
+
+  .headerFooter {
+    font-size: 14px;
+  }
+
+  .LinksSection a {
+    font-size: 13px;
+  }
+
+  .copy {
+    font-size: 12px;
+  }
+}
