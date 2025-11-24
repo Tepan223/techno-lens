@@ -1,31 +1,26 @@
-import { kv } from "@vercel/kv";
-import { promises as fs } from "fs";
-import path from "path";
+import { put, list } from "@vercel/blob";
+import { NextResponse } from "next/server";
 
-// Lokasi file lokal (hanya dipakai saat development)
-const filePath = path.join(process.cwd(), "app/users.json");
+const FILE_NAME = "users.json";
 
 // --- GET USER ---
 export async function GET() {
   try {
-    // 1. Coba baca dari KV (source utama)
-    const kvData = await kv.get("user");
+    // Cari file users.json di blob storage
+    const files = await list();
+    const file = files.blobs.find(b => b.pathname === FILE_NAME);
 
-    if (kvData) {
-      return Response.json(kvData, { status: 200 });
+    if (!file) {
+      return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    // 2. Jika KV kosong → fallback ke file lokal
-    const file = await fs.readFile(filePath, "utf-8");
-    if (!file.trim()) {
-      return Response.json({ user: null }, { status: 200 });
-    }
+    const json = await fetch(file.url).then(res => res.json());
 
-    const json = JSON.parse(file);
-    return Response.json(json, { status: 200 });
+    return NextResponse.json(json, { status: 200 });
 
   } catch (err) {
-    return Response.json({ user: null }, { status: 200 });
+    console.error("GET users error:", err);
+    return NextResponse.json({ user: null }, { status: 200 });
   }
 }
 
@@ -35,20 +30,28 @@ export async function POST(req) {
     const body = await req.json();
 
     if (!body.user) {
-      return Response.json({ error: "Invalid user format" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid user format" },
+        { status: 400 }
+      );
     }
 
-    // 1. Simpan ke KV (utama)
-    await kv.set("user", body);
+    // Simpan JSON ke blob
+    await put(FILE_NAME, JSON.stringify(body, null, 2), {
+      access: "public",
+      contentType: "application/json"
+    });
 
-    // 2. (Opsional) simpan ke file lokal untuk development
-    if (process.env.NODE_ENV === "development") {
-      await fs.writeFile(filePath, JSON.stringify(body, null, 2));
-    }
-
-    return Response.json({ message: "User updated!" }, { status: 200 });
+    return NextResponse.json(
+      { message: "User updated!" },
+      { status: 200 }
+    );
 
   } catch (err) {
-    return Response.json({ error: "Failed to update user" }, { status: 500 });
+    console.error("POST users error:", err);
+    return NextResponse.json(
+      { error: "Failed to update user" },
+      { status: 500 }
+    );
   }
 }
