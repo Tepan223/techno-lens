@@ -24,7 +24,7 @@ export default function Home() {
           <img src="/images/Main1.jpg" alt="Slide 1" className={Style.swiperSlide}/>
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/images/Main3.jpg" alt="Slide 2" className={Style.swiperSlide}/>
+          <img src="/images/Main2.jpg" alt="Slide 2" className={Style.swiperSlide}/>
         </SwiperSlide>
         <SwiperSlide>
           <img src="/images/Main3.jpg" alt="Slide 3" className={Style.swiperSlide}/>
