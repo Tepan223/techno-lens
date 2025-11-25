@@ -1,27 +1,51 @@
-import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { list, put } from "@vercel/blob";
 
-// Tentukan lokasi file JSON yang akan dibaca/ditulis
-const filePath = path.join(process.cwd(), "app/product.json");
+const FILE_NAME = "products.json";
+const TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
 
-export async function GET() {
-  // Membaca file product.json secara sinkron
-  // fs.readFileSync akan membaca isi file sebagai string UTF-8
-  const data = fs.readFileSync(filePath, "utf8");
+// --- READ BLOB ---
+async function readBlob() {
+  try {
+    const blobs = await list({ token: TOKEN });
+    const existing = blobs.blobs.find((b) => b.pathname === FILE_NAME);
 
-  // Mengirim response berupa JSON ke client
-  return NextResponse.json(JSON.parse(data));
+    if (!existing) return [];
+
+    const res = await fetch(existing.url);
+    if (!res.ok) return [];
+
+    return await res.json();
+  } catch (err) {
+    console.error("readBlob error:", err);
+    return [];
+  }
 }
 
-export async function POST(request) {
-  // Mengambil body request dan parsing menjadi object
-  const body = await request.json();
+// --- WRITE BLOB ---
+async function writeBlob(data) {
+  await put(FILE_NAME, JSON.stringify(data, null, 2), {
+    access: "public",
+    token: TOKEN,
+    allowOverwrite: true,        // ← WAJIB!!!
+  });
+}
 
-  // Menulis ulang file product.json dengan data baru
-  // JSON.stringify(body, null, 2) --> merapikan format JSON
-  fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+// --- API GET ---
+export async function GET() {
+  const data = await readBlob();
+  return Response.json(data);
+}
 
-  // Mengirim response sukses
-  return NextResponse.json({ message: "success" });
+// --- API POST ---
+export async function POST(req) {
+  try {
+    const body = await req.json();
+
+    await writeBlob(body);
+
+    return Response.json({ message: "success" });
+  } catch (err) {
+    console.error(err);
+    return Response.json({ error: "Failed" }, { status: 500 });
+  }
 }
