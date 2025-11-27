@@ -4,6 +4,7 @@ import { Card, Row, Col, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Category from "../components/category";
 import Styles from "../styles/Product.module.css";
+import Footer from "../components/Footer";
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -76,6 +77,8 @@ export default function ProductPage() {
           </Col>
         ))}
       </Row>
+      <Footer />
     </div>
+  
   );
 }
