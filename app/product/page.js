@@ -5,10 +5,13 @@ import { SearchOutlined } from "@ant-design/icons";
 import Category from "../components/category";
 import Styles from "../styles/Product.module.css";
 import Footer from "../components/Footer";
+import { useCart } from "../context/CartContext";
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
+  const { addToCart } = useCart();
+
 
   const load = async () => {
     const res = await fetch("/api/products");
@@ -68,7 +71,7 @@ export default function ProductPage() {
                 {/* Add to Cart */}
                 <div
                   className={Styles.addToCartBtn}
-                  onClick={() => alert(`Ditambahkan ke cart: ${item.name}`)}
+                  onClick={() => addToCart(item)}
                 >
                   + Add to Cart
                 </div>
