@@ -1,0 +1,72 @@
+.heading {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #4f4f4f;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  justify-items: center;
+  align-items: center;
+}
+
+.link {
+  width: 100%;
+  text-decoration: none;
+}
+
+.card {
+  width: 100%;
+  height: 110px;                       /* sedikit lebih tinggi agar proporsional */
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px !important;
+
+  border-radius: 12px;
+  border: 1px solid #d0d0d0 !important; /* lebih soft */
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* soft */
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  border-color: #9b9b9b !important;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.08)); /* lebih bersih */
+}
+
+.title {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.container {
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: sans-serif;
+  border-radius: 12px;
+}
+
+.imgBox {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

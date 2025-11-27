@@ -43,6 +43,9 @@ export default function ProductDashboard() {
   const [editUserOpen, setEditUserOpen] = useState(false);
   const [editUserForm] = Form.useForm();
 
+  // --- SEARCH BAR STATE ---
+  const [search, setSearch] = useState("");
+
   // --- LOAD PRODUCTS ---
   const loadData = async () => {
     try {
@@ -95,7 +98,7 @@ export default function ProductDashboard() {
     message.success("User berhasil diperbarui!");
   };
 
-  // --- TAMBAH PRODUK (SUDAH ADA KATEGORI) ---
+  // --- TAMBAH PRODUK ---
   const onFinish = async (values) => {
     let base64 = "";
 
@@ -107,7 +110,7 @@ export default function ProductDashboard() {
       id: products.length ? products[products.length - 1].id + 1 : 1,
       name: values.name,
       price: values.price,
-      category: values.category,   // <--- TAMBAHAN
+      category: values.category,
       image: base64
     };
 
@@ -131,7 +134,7 @@ export default function ProductDashboard() {
     editForm.setFieldsValue({
       name: record.name,
       price: record.price,
-      category: record.category,  // <--- TAMBAHAN
+      category: record.category,
       image: []
     });
     setIsEditOpen(true);
@@ -151,7 +154,7 @@ export default function ProductDashboard() {
               ...item,
               name: values.name,
               price: values.price,
-              category: values.category,   // <--- TAMBAHAN
+              category: values.category,
               image: base64 || item.image
             }
           : item
@@ -207,11 +210,20 @@ export default function ProductDashboard() {
     });
   };
 
-  // --- TABEL PRODUK (TAMBAH KATEGORI) ---
+  // --- FILTER PRODUK UNTUK SEARCH ---
+  const filteredProducts = products.filter((item) => {
+    const keyword = search.toLowerCase();
+    return (
+      item.name.toLowerCase().includes(keyword) ||
+      item.category.toLowerCase().includes(keyword)
+    );
+  });
+
+  // --- TABEL PRODUK ---
   const columns = [
     { title: "ID", dataIndex: "id", width: 60 },
     { title: "Nama", dataIndex: "name" },
-    { title: "Kategori", dataIndex: "category" }, // <--- TAMBAHAN
+    { title: "Kategori", dataIndex: "category" },
     {
       title: "Harga",
       dataIndex: "price",
@@ -244,6 +256,7 @@ export default function ProductDashboard() {
 
   return (
     <div style={{ padding: 20 }}>
+      
       {/* LOGIN BUTTON */}
       <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
         {!isLoggedIn ? (
@@ -287,7 +300,6 @@ export default function ProductDashboard() {
                   <InputNumber min={0} style={{ width: "100%" }} />
                 </Form.Item>
 
-                {/* KATEGORI */}
                 <Form.Item
                   name="category"
                   label="Kategori"
@@ -316,11 +328,23 @@ export default function ProductDashboard() {
             </Card>
           </Col>
 
-          {/* TABEL PRODUK */}
+          {/* TABEL PRODUK + SEARCH BAR */}
           <Col xs={24} md={14}>
-            <Card title="Daftar Produk">
+            <Card
+              title={
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span>Daftar Produk</span>
+                  <Input
+                    placeholder="Cari produk..."
+                    style={{ width: "50%" }}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
+              }
+            >
               <Table
-                dataSource={products}
+                dataSource={filteredProducts}
                 columns={columns}
                 rowKey="id"
                 pagination={{ pageSize: 5 }}
@@ -350,7 +374,6 @@ export default function ProductDashboard() {
             <InputNumber min={0} style={{ width: "100%" }} />
           </Form.Item>
 
-          {/* KATEGORI EDIT */}
           <Form.Item name="category" label="Kategori" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
