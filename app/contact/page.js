@@ -32,7 +32,7 @@ export default function ContactPage() {
                 </a>
               </p>
 
-              <p>Jam Operasional: Senin-Jumat, 08.00-17.00</p>
+              <p>Jam Operasional: <br />Senin-Jumat<br/>08:00 A.M - 17:00 P.M</p>
             </div>
 
             <div className={Style.form}>
