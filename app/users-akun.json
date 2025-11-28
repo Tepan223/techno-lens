@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1732765401234,
+    "fullname": "Lionel Liauw",
+    "username": "lionel",
+    "password": "rahasia123",
+    "role": "member",
+    "createdAt": "2025-11-28T10:45:00.000Z"
+  },
+  {
+    "id": 1732765505678,
+    "fullname": "Billy",
+    "username": "billy_akuntansi",
+    "password": "billypassword",
+    "role": "member",
+    "createdAt": "2025-11-28T10:50:00.000Z"
+  }
+]

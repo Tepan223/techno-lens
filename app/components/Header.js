@@ -1,112 +1,182 @@
-'use client';
+"use client";
 import { useState } from "react";
-import Styles from '../styles/Header.module.css';
-import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
-import { Modal, Avatar, Button, Badge } from "antd";
+import Styles from "../styles/Header.module.css";
+import {
+  ShoppingCartOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import { Modal, Avatar, Button, Badge, Dropdown, message } from "antd";
 import { useCart } from "../context/CartContext";
-import '@ant-design/v5-patch-for-react-19';
-
+import { useAuth } from "../context/AuthContext";
+import LoginModal from "../components/LoginModal";
+import "@ant-design/v5-patch-for-react-19";
 
 export default function Header() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const { cart, removeFromCart } = useCart();
-    const showModal = () => setIsModalOpen(true);
-    const handleOk = () => setIsModalOpen(false);
-    const handleCancel = () => setIsModalOpen(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-    // Hitung total item & total harga
-    const totalItems = cart.length;
-    const totalHarga = cart.reduce((sum, item) => sum + item.price, 0);
+  const { user, isLoggedIn, logout, openLoginModal } = useAuth();
+  // Kita tidak butuh clearCart di sini lagi
+  const { cart, removeFromCart } = useCart(); 
 
-    return (
-        <div className={Styles.header}>
-            <div>
-                <a href="/" className={Styles.logo}>
-                    <img src='/images/Techno-Lens.png' className={Styles.techno} />
-                </a>
-            </div>
+  const handleCartClick = () => {
+    if (!isLoggedIn) {
+      message.warning("Silakan login untuk melihat keranjang!");
+      openLoginModal();
+    } else {
+      setIsCartOpen(true);
+    }
+  };
 
-            <div style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:'20px'}}>
+  const handleCloseCart = () => setIsCartOpen(false);
 
-                {/* Navbar */}
-                <div className={Styles.navlinks}>
-                    <a href="/" className={Styles.link}>Home</a>
-                    <a href="/about" className={Styles.link}>About</a>
-                    <a href="/product" className={Styles.link}>Product</a>
-                    <a href="/contact" className={Styles.link}>Contact</a>
-                </div>
+  // --- PERBAIKAN DI SINI ---
+  const handleLogout = () => {
+    // 1. Cukup panggil logout dari AuthContext
+    logout(); 
+    
+    // 2. JANGAN panggil clearCart(). 
+    // Biarkan data keranjang user tersimpan aman di LocalStorage.
+    // Context akan otomatis mengubah keranjang tampilan menjadi kosong (Guest).
 
-                {/* Avatar Login */}
-                <a href="/login">
-                    <Avatar 
-                        style={{ backgroundColor: "#1a153f", cursor: "pointer" }} 
-                        icon={<UserOutlined />} 
-                        size={40}
-                    />
-                </a>
+    message.info("Berhasil Logout");
+  };
 
-                {/* Cart Icon + Badge */}
-                <div className={Styles.carticon} onClick={showModal}>
-                    <Badge count={cart.length} size="small">
-                        <ShoppingCartOutlined 
-                            style={{ fontSize: "35px", cursor: "pointer", color: "#1a153f" }} 
-                        />
-                    </Badge>
-                </div>
+  const totalItems = cart.length;
+  const totalHarga = cart.reduce((sum, item) => sum + item.price, 0);
 
-                {/* Modal Cart */}
-                <Modal
-                    title="Cart Items"
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                    okText="Checkout"
-                    cancelText="Close"
-                >
+  const userMenuItems = [
+    {
+      key: "1",
+      label: <a href="/profile">Profile</a>,
+    },
+    {
+      key: "2",
+      label: "Logout",
+      icon: <LogoutOutlined />,
+      onClick: handleLogout,
+      danger: true,
+    },
+  ];
 
-                    {cart.length === 0 ? (
-                        <p>Belom ada item untuk dibeli</p>
-                    ) : (
-                        <>
-                            {cart.map((item, index) => (
-                                <div 
-                                    key={index} 
-                                    style={{
-                                        marginBottom: "15px",
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center"
-                                    }}
-                                >
-                                    <div>
-                                        <strong>{item.name}</strong> <br />
-                                        Rp {item.price.toLocaleString()}
-                                    </div>
+  return (
+    <div className={Styles.header}>
+      <LoginModal />
 
-                                    <Button 
-                                        danger 
-                                        onClick={() => removeFromCart(index)}
-                                    >
-                                        Hapus
-                                    </Button>
-                                </div>
-                            ))}
+      <div>
+        <a href="/" className={Styles.logo}>
+          <img src="/images/Techno-Lens.png" className={Styles.techno} />
+        </a>
+      </div>
 
-                            {/* TOTAL ITEM + TOTAL HARGA */}
-                            <hr />
-
-                            <div style={{ marginTop: "10px" }}>
-                                <p><strong>Total Item:</strong> {totalItems}</p>
-                                <p>
-                                    <strong>Total Harga:</strong> 
-                                    &nbsp; Rp {totalHarga.toLocaleString()}
-                                </p>
-                            </div>
-                        </>
-                    )}
-
-                </Modal>
-            </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "20px",
+        }}
+      >
+        <div className={Styles.navlinks}>
+          <a href="/" className={Styles.link}>Home</a>
+          <a href="/about" className={Styles.link}>About</a>
+          <a href="/product" className={Styles.link}>Product</a>
+          <a href="/contact" className={Styles.link}>Contact</a>
         </div>
-    );
+
+        {isLoggedIn ? (
+          <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <Avatar
+                style={{ backgroundColor: "#1a153f" }}
+                icon={<UserOutlined />}
+                size={40}
+              />
+              <span style={{ color: "#1a153f", fontWeight: "bold" }}>
+                {user.name}
+              </span>
+            </div>
+          </Dropdown>
+        ) : (
+          <div onClick={openLoginModal} style={{ cursor: "pointer" }}>
+            <Avatar
+              style={{ backgroundColor: "#ccc" }}
+              icon={<UserOutlined />}
+              size={40}
+            />
+          </div>
+        )}
+
+        <div className={Styles.carticon} onClick={handleCartClick}>
+          <Badge count={isLoggedIn ? cart.length : 0} size="small">
+            <ShoppingCartOutlined
+              style={{ fontSize: "35px", cursor: "pointer", color: "#1a153f" }}
+            />
+          </Badge>
+        </div>
+
+        <Modal
+          title="Keranjang Belanja"
+          open={isCartOpen}
+          onOk={handleCloseCart}
+          onCancel={handleCloseCart}
+          okText="Checkout"
+          cancelText="Tutup"
+        >
+          {cart.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "20px" }}>
+              <p>Keranjang masih kosong nih.</p>
+            </div>
+          ) : (
+            <>
+              {cart.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    marginBottom: "15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    borderBottom: "1px solid #eee",
+                    paddingBottom: "10px",
+                  }}
+                >
+                  <div>
+                    <strong>{item.name}</strong> <br />
+                    <span style={{ color: "#888" }}>
+                      Rp {item.price.toLocaleString()}
+                    </span>
+                  </div>
+                  <Button
+                    type="text"
+                    danger
+                    onClick={() => removeFromCart(index)}
+                  >
+                    Hapus
+                  </Button>
+                </div>
+              ))}
+
+              <div style={{ marginTop: "20px", textAlign: "right" }}>
+                <p style={{ fontSize: "16px" }}>
+                  Total ({totalItems} item):
+                  <strong style={{ fontSize: "18px", color: "#1a153f" }}>
+                    {" "}
+                    Rp {totalHarga.toLocaleString()}
+                  </strong>
+                </p>
+              </div>
+            </>
+          )}
+        </Modal>
+      </div>
+    </div>
+  );
 }
