@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+  // Load user dari LocalStorage saat aplikasi dimuat
   useEffect(() => {
     const storedUser = localStorage.getItem("user_data");
     if (storedUser) {
@@ -29,11 +30,10 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        // Jika password salah (401), lempar error agar ditangkap catch
         throw new Error(data.message || "Gagal Login");
       }
 
-      // Login Sukses
+      // Login Sukses: Simpan data user
       const userData = { 
         name: data.user.fullname, 
         username: data.user.username, 
@@ -42,11 +42,11 @@ export const AuthProvider = ({ children }) => {
 
       setUser(userData);
       localStorage.setItem("user_data", JSON.stringify(userData));
-      setIsLoginModalOpen(false); // Tutup modal
+      setIsLoginModalOpen(false);
       message.success(`Selamat datang, ${userData.name}!`);
 
     } catch (error) {
-      message.error(error.message); // Tampilkan error "Username salah" disini
+      message.error(error.message);
     }
   };
 
@@ -86,6 +86,37 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // --- UPDATE PASSWORD (BARU) ---
+  const updateUserPassword = async (oldPassword, newPassword) => {
+    try {
+      if (!user?.username) throw new Error("User tidak terautentikasi.");
+      
+      const res = await fetch("/api/update-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            username: user.username, 
+            oldPassword, 
+            newPassword 
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Gagal mengubah password.");
+      }
+      
+      message.success("Password berhasil diubah!");
+      return true;
+
+    } catch (error) {
+      message.error(error.message);
+      return false;
+    }
+  };
+
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user_data");
@@ -100,6 +131,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user, isLoggedIn: !!user,
         login, register, logout,
+        updateUserPassword, // <--- FUNGSI BARU DI EXPORT DI SINI
         isLoginModalOpen, openLoginModal, closeLoginModal,
       }}
     >
