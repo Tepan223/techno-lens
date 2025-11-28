@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@vercel/blob": "^2.0.0",
     "@vercel/kv": "^3.0.0",
     "antd": "^5.28.1",

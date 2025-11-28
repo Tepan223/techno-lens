@@ -47,6 +47,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   width: 100%;
   text-align: center;
+  font-family: sans-serif;
 }
 
 /* ===========================
@@ -100,7 +101,7 @@
 .productPrice {
   font-size: 15px;
   font-weight: 700;
-  color: #C20000;
+  color: #1C1744;
   margin-bottom: 12px;
 }
 
@@ -111,7 +112,7 @@
   width: 100%;
   padding: 8px 0;
   border-radius: 8px;
-  background-color: #c20000;
+  background-color: #1c1744;
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
@@ -121,5 +122,5 @@
 }
 
 .addToCartBtn:hover {
-  background-color: #9e0000;
+  background-color: #222359;
 }
