@@ -270,6 +270,12 @@ export default function ProductDashboard() {
         ) : (
           <>
             <Button onClick={openEditUser}>Edit Akun</Button>
+            <Button 
+                type="default" 
+                onClick={() => window.location.href = '/dashboard/data-akun'}
+            >
+                Manajemen Akun
+            </Button>
             <Button danger onClick={() => setIsLoggedIn(false)}>
               Logout
             </Button>

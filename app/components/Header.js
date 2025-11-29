@@ -1,5 +1,9 @@
 "use client";
 import { useState } from "react";
+// GANTI DARI "next/router" KE "next/navigation"
+import Link from 'next/link'; 
+import { useRouter } from "next/navigation"; 
+// Sisa impor lainnya
 import Styles from "../styles/Header.module.css";
 import {
   ShoppingCartOutlined,
@@ -14,9 +18,12 @@ import "@ant-design/v5-patch-for-react-19";
 
 export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  // useRouter sekarang mengambil dari next/navigation
+  const router = useRouter(); 
 
+  // ... (Sisa kode komponen Anda tidak perlu diubah lagi)
+  
   const { user, isLoggedIn, logout, openLoginModal } = useAuth();
-  // Kita tidak butuh clearCart di sini lagi
   const { cart, removeFromCart } = useCart(); 
 
   const handleCartClick = () => {
@@ -30,15 +37,18 @@ export default function Header() {
 
   const handleCloseCart = () => setIsCartOpen(false);
 
-  // --- PERBAIKAN DI SINI ---
-  const handleLogout = () => {
-    // 1. Cukup panggil logout dari AuthContext
-    logout(); 
-    
-    // 2. JANGAN panggil clearCart(). 
-    // Biarkan data keranjang user tersimpan aman di LocalStorage.
-    // Context akan otomatis mengubah keranjang tampilan menjadi kosong (Guest).
+  const handleCheckout = () => {
+    if (cart.length === 0) {
+        message.warning("Keranjang Anda kosong!");
+        return;
+    }
+    // Navigasi ini bekerja sama di kedua router
+    router.push("/checkout"); 
+    setIsCartOpen(false); 
+  };
 
+  const handleLogout = () => {
+    logout(); 
     message.info("Berhasil Logout");
   };
 
@@ -48,7 +58,7 @@ export default function Header() {
   const userMenuItems = [
     {
       key: "1",
-      label: <a href="/profile">Profile</a>,
+      label: <Link href="/profile">Profile</Link>,
     },
     {
       key: "2",
@@ -64,9 +74,9 @@ export default function Header() {
       <LoginModal />
 
       <div>
-        <a href="/" className={Styles.logo}>
-          <img src="/images/Techno-Lens.png" className={Styles.techno} />
-        </a>
+        <Link href="/" className={Styles.logo}>
+          <img src="/images/Techno-Lens.png" className={Styles.techno} alt="Techno-Lens Logo" />
+        </Link>
       </div>
 
       <div
@@ -78,10 +88,10 @@ export default function Header() {
         }}
       >
         <div className={Styles.navlinks}>
-          <a href="/" className={Styles.link}>Home</a>
-          <a href="/about" className={Styles.link}>About</a>
-          <a href="/product" className={Styles.link}>Product</a>
-          <a href="/contact" className={Styles.link}>Contact</a>
+          <Link href="/" className={Styles.link}>Home</Link>
+          <Link href="/about" className={Styles.link}>About</Link>
+          <Link href="/product" className={Styles.link}>Product</Link>
+          <Link href="/contact" className={Styles.link}>Contact</Link>
         </div>
 
         {isLoggedIn ? (
@@ -125,10 +135,11 @@ export default function Header() {
         <Modal
           title="Keranjang Belanja"
           open={isCartOpen}
-          onOk={handleCloseCart}
+          onOk={handleCheckout} 
           onCancel={handleCloseCart}
           okText="Checkout"
           cancelText="Tutup"
+          okButtonProps={{ disabled: cart.length === 0 }} 
         >
           {cart.length === 0 ? (
             <div style={{ textAlign: "center", padding: "20px" }}>
