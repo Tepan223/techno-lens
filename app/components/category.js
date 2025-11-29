@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import { Card } from "antd";
+import Link from "next/link"; // Import komponen Link
 import Styles from "../styles/Category.module.css";
 
 export default function CategoryGrid() {
@@ -23,20 +25,31 @@ export default function CategoryGrid() {
       <h1 className={Styles.heading}>KATEGORI</h1>
 
       <div className={Styles.grid}>
-        {categories.map((category, index) => (
-          <a key={index} href="/product" className={Styles.link}>
-            <Card hoverable className={Styles.card}>
-              <div className={Styles.imgBox}>
-                <img
-                  src={category.img}
-                  alt={category.title}
-                  className={Styles.img}
-                />
-              </div>
-              <p className={Styles.title}>{category.title}</p>
-            </Card>
-          </a>
-        ))}
+        {categories.map((category, index) => {
+          // 1. Buat Slug: Ubah nama kategori jadi URL friendly (huruf kecil, spasi jadi strip)
+          // Contoh: "Memory Card" -> "memory-card"
+          const slug = category.title.toLowerCase().replace(/\s+/g, '-');
+
+          return (
+            // 2. Gunakan <Link> dan arahkan ke path dinamis
+            <Link 
+              key={index} 
+              href={`/product/${slug}`} 
+              className={Styles.link}
+            >
+              <Card hoverable className={Styles.card}>
+                <div className={Styles.imgBox}>
+                  <img
+                    src={category.img}
+                    alt={category.title}
+                    className={Styles.img}
+                  />
+                </div>
+                <p className={Styles.title}>{category.title}</p>
+              </Card>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
